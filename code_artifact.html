@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>せいかつしえんぎじゅつ 180ぷん あなうめワークブック</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #f0fdf4;
+      color: #1e293b;
+      line-height: 2.55;
+      -webkit-tap-highlight-color: transparent;
+    }
+    ruby {
+      ruby-align: center;
+    }
+    rt {
+      font-size: 0.62em;
+      color: #0f766e;
+      font-weight: 600;
+      line-height: 1;
+      user-select: none;
+    }
+    .dark-bg rt {
+      color: #99f6e4;
+    }
+    .step-tab.active {
+      background-color: #0d9488;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 3px 8px rgba(13, 148, 136, 0.35);
+    }
+    .step-tab.active rt {
+      color: #fef08a;
+    }
+    .blank-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 7.5rem;
+      padding: 0.15rem 0.65rem;
+      margin: 0.15rem 0.2rem;
+      border-radius: 0.75rem;
+      border: 2px dashed #0d9488;
+      background-color: #f0fdfa;
+      color: #0f766e;
+      font-weight: 700;
+      cursor: pointer;
+      vertical-align: baseline;
+      transition: all 0.2s ease;
+      line-height: 2.1;
+    }
+    .blank-slot.filled {
+      border-style: solid;
+      background-color: #ccfbf1;
+      color: #115e59;
+      box-shadow: 0 2px 4px rgba(13, 148, 136, 0.15);
+    }
+    .blank-slot.active-focus {
+      border-color: #f59e0b;
+      background-color: #fef3c7;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.35);
+    }
+    .blank-slot.correct {
+      border-style: solid;
+      border-color: #16a34a;
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .blank-slot.incorrect {
+      border-style: solid;
+      border-color: #e11d48;
+      background-color: #ffe4e6;
+      color: #9f1239;
+    }
+    .select-card:checked + div {
+      background-color: #ccfbf1;
+      border-color: #0d9488;
+      color: #115e59;
+      font-weight: 700;
+      box-shadow: 0 0 0 2px #0d9488;
+    }
+    .pb-safe {
+      padding-bottom: 8rem;
+    }
+    textarea, input[type="text"] {
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body class="pb-safe">
+
+  <!-- Sticky Header -->
+  <header class="bg-teal-900 text-white sticky top-0 z-30 shadow-md dark-bg">
+    <div class="max-w-xl mx-auto px-3.5 py-2.5 flex items-center justify-between">
+      <div>
+        <span class="text-[11px] bg-teal-700 px-2.5 py-0.5 rounded-full font-medium inline-block leading-normal">
+          <ruby>留学生<rt>りゅうがくせい</rt></ruby><ruby>用<rt>よう</rt></ruby>・<ruby>実技<rt>じつぎ</rt></ruby>なし180<ruby>分<rt>ぷん</rt></ruby><ruby>課題<rt>かだい</rt></ruby>
+        </span>
+        <h1 class="text-sm sm:text-base font-bold mt-0.5 leading-relaxed">
+          <ruby>生活<rt>せいかつ</rt></ruby><ruby>支援<rt>しえん</rt></ruby><ruby>技術<rt>ぎじゅつ</rt></ruby>：<ruby>穴埋<rt>あなう</rt></ruby>め<ruby>問題集<rt>もんだいしゅう</rt></ruby>（<ruby>全<rt>ぜん</rt></ruby>40<ruby>問<rt>もん</rt></ruby>）
+        </h1>
+      </div>
+      <div class="text-right shrink-0">
+        <div id="save-status" class="text-[11px] text-teal-200 flex items-center gap-1 justify-end leading-normal">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span><ruby>自動<rt>じどう</rt></ruby><ruby>保存<rt>ほぞん</rt></ruby></span>
+        </div>
+        <div class="text-xs text-amber-300 font-bold mt-0.5 leading-normal">
+          <ruby>回答<rt>かいとう</rt></ruby>: <span id="progress-count">0</span> / 40<ruby>問<rt>もん</rt></ruby>
+        </div>
+        <div class="w-24 bg-teal-950 rounded-full h-2 mt-1 overflow-hidden">
+          <div id="progress-bar" class="bg-amber-400 h-2 transition-all duration-300" style="width: 2%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs (6 Tabs) -->
+    <div class="bg-teal-950/90 px-2 py-1.5 overflow-x-auto">
+      <div class="max-w-xl mx-auto grid grid-cols-6 gap-1 text-[11px]">
+        <button type="button" onclick="switchTab(0)" id="tab-0" class="step-tab active py-1.5 px-1 rounded-xl text-teal-100 transition text-center leading-relaxed">
+          <i class="fa-solid fa-id-card block text-xs mb-0.5"></i>
+          <ruby>案内<rt>あんない</rt></ruby>
+        </button>
+        <button type="button" onclick="switchTab(1)" id="tab-1" class="step-tab py-1.5 px-1 rounded-xl text-teal-100 transition text-center leading-relaxed">
+          <i class="fa-solid fa-person-walking block text-xs mb-0.5"></i>
+          1<ruby>限<rt>げん</rt></ruby>①
+        </button>
+        <button type="button" onclick="switchTab(2)" id="tab-2" class="step-tab py-1.5 px-1 rounded-xl text-teal-100 transition text-center leading-relaxed">
+          <i class="fa-solid fa-wheelchair block text-xs mb-0.5"></i>
+          1<ruby>限<rt>げん</rt></ruby>②
+        </button>
+        <button type="button" onclick="switchTab(3)" id="tab-3" class="step-tab py-1.5 px-1 rounded-xl text-teal-100 transition text-center leading-relaxed">
+          <i class="fa-solid fa-utensils block text-xs mb-0.5"></i>
+          2<ruby>限<rt>げん</rt></ruby>①
+        </button>
+        <button type="button" onclick="switchTab(4)" id="tab-4" class="step-tab py-1.5 px-1 rounded-xl text-teal-100 transition text-center leading-relaxed">
+          <i class="fa-solid fa-comments block text-xs mb-0.5"></i>
+          2<ruby>限<rt>げん</rt></ruby>②
+        </button>
+        <button type="button" onclick="switchTab(5)" id="tab-5" class="step-tab py-1.5 px-1 rounded-xl text-teal-100 transition text-center leading-relaxed">
+          <i class="fa-solid fa-paper-plane block text-xs mb-0.5"></i>
+          <ruby>提出<rt>ていしゅつ</rt></ruby>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-xl mx-auto px-3.5 pt-4 space-y-5">
+
+    <!-- ==================== TAB 0: 基本情報・使い方 ==================== -->
+    <section id="section-0" class="space-y-4">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-teal-200 space-y-3">
+        <div class="flex items-center gap-2 text-teal-800 font-bold text-base">
+          <i class="fa-solid fa-book-open-reader text-amber-500 text-lg"></i>
+          <h2>180<ruby>分<rt>ぷん</rt></ruby>（90<ruby>分<rt>ぷん</rt></ruby>×2）<ruby>穴埋<rt>あなう</rt></ruby>めワークの<ruby>進<rt>すす</rt></ruby>め<ruby>方<rt>かた</rt></ruby></h2>
+        </div>
+        <p class="text-sm text-slate-700">
+          <ruby>今日<rt>きょう</rt></ruby>の<ruby>授業<rt>じゅぎょう</rt></ruby>では、<ruby>実技<rt>じつぎ</rt></ruby>をせずにスマートフォンで<strong class="text-teal-900 bg-amber-100 px-1 rounded">「<ruby>移乗<rt>いじょう</rt></ruby>・<ruby>移動<rt>いどう</rt></ruby>」「<ruby>福祉<rt>ふくし</rt></ruby><ruby>用具<rt>ようぐ</rt></ruby>」「<ruby>睡眠<rt>すいみん</rt></ruby>・<ruby>食事<rt>しょくじ</rt></ruby>とのつながり」</strong>の<ruby>大切<rt>たいせつ</rt></ruby>なことば（<ruby>全部<rt>ぜんぶ</rt></ruby>で40<ruby>問<rt>もん</rt></ruby>）を<ruby>穴埋<rt>あなう</rt></ruby>め<ruby>問題<rt>もんだい</rt></ruby>でマスターします。
+        </p>
+
+        <!-- 使い方の説明 -->
+        <div class="bg-teal-50 rounded-xl p-4 border border-teal-200 text-xs sm:text-sm space-y-2">
+          <div class="font-bold text-teal-900">
+            <i class="fa-solid fa-hand-pointer mr-1 text-teal-600"></i>スマートフォンの<ruby>操作<rt>そうさ</rt></ruby><ruby>方法<rt>ほうほう</rt></ruby>（かんたん2ステップ）
+          </div>
+          <p>① <ruby>問題文<rt>もんだいぶん</rt></ruby>のなかの <span class="inline-block px-2 py-0.5 rounded border-2 border-dashed border-teal-600 bg-white text-teal-800 font-bold text-xs">【 1 】タップして<ruby>選<rt>えら</rt></ruby>ぶ</span> をタップします。</p>
+          <p>② <ruby>画面<rt>がめん</rt></ruby>の<ruby>下<rt>した</rt></ruby>から「ことばのリスト（<ruby>語群<rt>ごぐん</rt></ruby>）」が<ruby>出<rt>で</rt></ruby>てくるので、<ruby>正<rt>ただ</rt></ruby>しいことばをタップすると<ruby>自動<rt>じどう</rt></ruby>で<ruby>入<rt>はい</rt></ruby>ります！</p>
+        </div>
+
+        <!-- 時間配分ガイド -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="font-bold text-teal-800 mb-1">
+              <i class="fa-solid fa-clock mr-1"></i>1<ruby>限目<rt>げんめ</rt></ruby>（90<ruby>分<rt>ぷん</rt></ruby>）：【1】〜【22】
+            </div>
+            <p class="text-slate-600">
+              ・1<ruby>限<rt>げん</rt></ruby>①：ボディメカニクスと<ruby>移乗<rt>いじょう</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>（10<ruby>問<rt>もん</rt></ruby>）<br>
+              ・1<ruby>限<rt>げん</rt></ruby>②：<ruby>福祉<rt>ふくし</rt></ruby><ruby>用具<rt>ようぐ</rt></ruby>と<ruby>車<rt>くるま</rt></ruby>いすの<ruby>名前<rt>なまえ</rt></ruby>・<ruby>角度<rt>かくど</rt></ruby>（12<ruby>問<rt>もん</rt></ruby>）
+            </p>
+          </div>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="font-bold text-amber-800 mb-1">
+              <i class="fa-solid fa-clock mr-1"></i>2<ruby>限目<rt>げんめ</rt></ruby>（90<ruby>分<rt>ぷん</rt></ruby>）：【23】〜【40】
+            </div>
+            <p class="text-slate-600">
+              ・2<ruby>限<rt>げん</rt></ruby>①：<ruby>睡眠<rt>すいみん</rt></ruby>・<ruby>移乗<rt>いじょう</rt></ruby>・<ruby>食事<rt>しょくじ</rt></ruby>のつながり（10<ruby>問<rt>もん</rt></ruby>）<br>
+              ・2<ruby>限<rt>げん</rt></ruby>②：<ruby>佐藤<rt>さとう</rt></ruby>さん（<ruby>左片麻痺<rt>ひだりかたまひ</rt></ruby>）の<ruby>事例<rt>じれい</rt></ruby>と<ruby>声<rt>こえ</rt></ruby>かけ（8<ruby>問<rt>もん</rt></ruby>＋まとめ）
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 学生情報入力 -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2 border-b pb-2">
+          <i class="fa-solid fa-user-pen text-teal-700"></i>
+          <span>あなたの<ruby>情報<rt>じょうほう</rt></ruby>を<ruby>入<rt>い</rt></ruby>れてください</span>
+        </h3>
+
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">
+            1. <ruby>学籍<rt>がくせき</rt></ruby><ruby>番号<rt>ばんごう</rt></ruby> <span class="text-rose-500">*</span>
+          </label>
+          <input type="text" id="studentId" oninput="saveData()" placeholder="26CW001" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-teal-600">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">
+            2. <ruby>名前<rt>なまえ</rt></ruby>（フルネーム） <span class="text-rose-500">*</span>
+          </label>
+          <input type="text" id="studentName" oninput="saveData()" placeholder="なまえ を にゅうりょく" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-teal-600">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">
+            3. クラス・グループ（タップして<ruby>選<rt>えら</rt></ruby>ぶ）
+          </label>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs sm:text-sm">
+            <label class="cursor-pointer">
+              <input type="radio" name="groupId" value="Aグループ" onchange="saveData()" class="hidden select-card">
+              <div class="border border-slate-300 rounded-xl py-2.5 px-2 transition bg-slate-50">Aグループ</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="groupId" value="Bグループ" onchange="saveData()" class="hidden select-card">
+              <div class="border border-slate-300 rounded-xl py-2.5 px-2 transition bg-slate-50">Bグループ</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="groupId" value="Cグループ" onchange="saveData()" class="hidden select-card">
+              <div class="border border-slate-300 rounded-xl py-2.5 px-2 transition bg-slate-50">Cグループ</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="groupId" value="Dグループ" onchange="saveData()" class="hidden select-card">
+              <div class="border border-slate-300 rounded-xl py-2.5 px-2 transition bg-slate-50">Dグループ</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="groupId" value="Eグループ" onchange="saveData()" class="hidden select-card">
+              <div class="border border-slate-300 rounded-xl py-2.5 px-2 transition bg-slate-50">Eグループ</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="groupId" value="個人ワーク" onchange="saveData()" class="hidden select-card">
+              <div class="border border-slate-300 rounded-xl py-2.5 px-2 transition bg-slate-50"><ruby>個人<rt>こじん</rt></ruby>ワーク</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" onclick="switchTab(1)" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-4 rounded-2xl shadow-md flex items-center justify-center gap-2 transition dark-bg text-base">
+        <span>1<ruby>限目<rt>げんめ</rt></ruby>①（【1】〜【10】）をはじめる</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </section>
+
+    <!-- ==================== TAB 1: 1限目① ボディメカニクスと移乗の基本（問1〜問10） ==================== -->
+    <section id="section-1" class="space-y-4 hidden">
+      <div class="bg-teal-900 text-white rounded-2xl p-4 shadow-sm dark-bg flex items-center justify-between">
+        <div>
+          <span class="text-xs bg-amber-400 text-slate-950 font-bold px-2.5 py-0.5 rounded-full">1<ruby>限目<rt>げんめ</rt></ruby>・<ruby>前半<rt>ぜんはん</rt></ruby>（45<ruby>分<rt>ぷん</rt></ruby>）</span>
+          <h2 class="text-base font-bold mt-1">
+            パート1：ボディメカニクスと<ruby>移乗<rt>いじょう</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>（【1】〜【10】）
+          </h2>
+        </div>
+        <button type="button" onclick="toggleHint('hint-1')" class="bg-teal-700 hover:bg-teal-600 text-amber-200 text-xs px-3 py-2 rounded-xl border border-teal-500 shrink-0">
+          <i class="fa-solid fa-lightbulb mr-1"></i>ヒント
+        </button>
+      </div>
+
+      <!-- ヒントボックス 1 -->
+      <div id="hint-1" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs sm:text-sm space-y-1.5 text-slate-800">
+        <div class="font-bold text-amber-900"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>ことばのヒント（パート1）</div>
+        <p>・<strong><ruby>支持基底面<rt>しじきていめん</rt></ruby>：</strong> <ruby>体<rt>からだ</rt></ruby>を<ruby>支<rt>ささ</rt></ruby>える<ruby>足<rt>あし</rt></ruby>の<ruby>広<rt>ひろ</rt></ruby>さのことです。<ruby>広<rt>ひろ</rt></ruby>いほど<ruby>安定<rt>あんてい</rt></ruby>します。</p>
+        <p>・<strong><ruby>健側<rt>けんそく</rt></ruby>と<ruby>患側<rt>かんそく</rt></ruby>：</strong> <ruby>麻痺<rt>まひ</rt></ruby>がない<ruby>健康<rt>けんこう</rt></ruby>な<ruby>側<rt>がわ</rt></ruby>を「<ruby>健側<rt>けんそく</rt></ruby>」、<ruby>麻痺<rt>まひ</rt></ruby>がある<ruby>側<rt>がわ</rt></ruby>を「<ruby>患側<rt>かんそく</rt></ruby>」と<ruby>言<rt>い</rt></ruby>います。</p>
+        <p>・<strong><ruby>残存機能<rt>ざんぞんきのう</rt></ruby>：</strong> <ruby>病気<rt>びょうき</rt></ruby>や<ruby>障害<rt>しょうがい</rt></ruby>があっても、<ruby>残<rt>のこ</rt></ruby>っている「できる<ruby>力<rt>ちから</rt></ruby>」のことです。</p>
+      </div>
+
+      <!-- 穴埋め問題カード 1 -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-5 text-sm sm:text-base">
+        <div class="border-l-4 border-teal-600 pl-3 font-bold text-slate-800">
+          （1）<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>の<ruby>腰<rt>こし</rt></ruby>を<ruby>守<rt>まも</rt></ruby>る「ボディメカニクスの<ruby>原則<rt>げんそく</rt></ruby>」
+        </div>
+
+        <p>
+          ① <ruby>介護福祉士<rt>かいごふくしし</rt></ruby>が<ruby>自分<rt>じぶん</rt></ruby>の<ruby>足<rt>あし</rt></ruby>を<ruby>前後<rt>ぜんご</rt></ruby>・<ruby>左右<rt>さゆう</rt></ruby>に<ruby>開<rt>ひら</rt></ruby>いて、<ruby>体<rt>からだ</rt></ruby>を<ruby>支<rt>ささ</rt></ruby>える<ruby>床<rt>ゆか</rt></ruby>の<ruby>面積<rt>めんせき</rt></ruby>である
+          <button type="button" onclick="openWordPicker(1, 0)" id="slot-1" class="blank-slot"></button>
+          を<ruby>広<rt>ひろ</rt></ruby>くすると、<ruby>体<rt>からだ</rt></ruby>のバランスが<ruby>安定<rt>あんてい</rt></ruby>します。
+        </p>
+
+        <p>
+          ② <ruby>膝<rt>ひざ</rt></ruby>を<ruby>曲<rt>ま</rt></ruby>げて、<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>の<ruby>腰<rt>こし</rt></ruby>の<ruby>位置<rt>いち</rt></ruby>である
+          <button type="button" onclick="openWordPicker(2, 0)" id="slot-2" class="blank-slot"></button>
+          を<ruby>低<rt>ひく</rt></ruby>くし、<ruby>利用者<rt>りようしゃ</rt></ruby>さんの<ruby>体<rt>からだ</rt></ruby>にしっかり<ruby>近<rt>ちか</rt></ruby>づいて<ruby>介助<rt>かいじょ</rt></ruby>すると、<ruby>軽<rt>かる</rt></ruby>い<ruby>力<rt>ちから</rt></ruby>で<ruby>安全<rt>あんぜん</rt></ruby>に<ruby>支<rt>ささ</rt></ruby>えることができます。
+        </p>
+
+        <p>
+          ③ <ruby>利用者<rt>りようしゃ</rt></ruby>さんの<ruby>体<rt>からだ</rt></ruby>をベッドから<ruby>上<rt>うえ</rt></ruby>へ<ruby>持<rt>も</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げるのではなく、<ruby>腕<rt>うで</rt></ruby>や<ruby>膝<rt>ひざ</rt></ruby>をまとめて<ruby>体<rt>からだ</rt></ruby>を<ruby>小<rt>ちい</rt></ruby>さくし、シーツとの
+          <button type="button" onclick="openWordPicker(3, 0)" id="slot-3" class="blank-slot"></button>
+          を<ruby>減<rt>へ</rt></ruby>らして<ruby>水平<rt>すいへい</rt></ruby>（<ruby>横<rt>よこ</rt></ruby>）に<ruby>滑<rt>すべ</rt></ruby>らせるように<ruby>動<rt>うご</rt></ruby>かします。
+        </p>
+
+        <p>
+          ④ <ruby>介護福祉士<rt>かいごふくしし</rt></ruby>が<ruby>足先<rt>あしさき</rt></ruby>を<ruby>動<rt>うご</rt></ruby>かす<ruby>方向<rt>ほうこう</rt></ruby>へ<ruby>向<rt>む</rt></ruby>けず、<ruby>腰<rt>こし</rt></ruby>や<ruby>背中<rt>せなか</rt></ruby>だけをひねる（ねじれ・
+          <button type="button" onclick="openWordPicker(4, 0)" id="slot-4" class="blank-slot"></button>
+          をつくる）と、<ruby>腰痛<rt>ようつう</rt></ruby>（<ruby>腰<rt>こし</rt></ruby>の<ruby>痛<rt>いた</rt></ruby>み）の<ruby>原因<rt>げんいん</rt></ruby>になるので<ruby>注意<rt>ちゅうい</rt></ruby>します。
+        </p>
+
+        <hr class="border-slate-200">
+
+        <div class="border-l-4 border-teal-600 pl-3 font-bold text-slate-800">
+          （2）<ruby>片麻痺<rt>かたまひ</rt></ruby>のある<ruby>利用者<rt>りようしゃ</rt></ruby>さんの<ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がりと<ruby>移乗<rt>いじょう</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>
+        </div>
+
+        <p>
+          ⑤ <ruby>介助<rt>かいじょ</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>める<ruby>前<rt>まえ</rt></ruby>には、<ruby>必<rt>かなら</rt></ruby>ず<ruby>利用者<rt>りようしゃ</rt></ruby>さんに「これから<ruby>車<rt>くるま</rt></ruby>いすに<ruby>移<rt>うつ</rt></ruby>りますよ」と<ruby>目的<rt>もくてき</rt></ruby>や<ruby>方法<rt>ほうほう</rt></ruby>を<ruby>説明<rt>せつめい</rt></ruby>し、
+          <button type="button" onclick="openWordPicker(5, 0)" id="slot-5" class="blank-slot"></button>
+          を<ruby>得<rt>え</rt></ruby>てから<ruby>行<rt>おこな</rt></ruby>います。
+        </p>
+
+        <p>
+          ⑥ <ruby>脳梗塞<rt>のうこうそく</rt></ruby>などで<ruby>体<rt>からだ</rt></ruby>の<ruby>片側<rt>かたがわ</rt></ruby>に<ruby>麻痺<rt>まひ</rt></ruby>があるとき、<ruby>麻痺<rt>まひ</rt></ruby>がない<ruby>動<rt>うご</rt></ruby>かしやすい<ruby>側<rt>がわ</rt></ruby>を
+          <button type="button" onclick="openWordPicker(6, 0)" id="slot-6" class="blank-slot"></button>
+          と<ruby>言<rt>い</rt></ruby>い、<ruby>麻痺<rt>まひ</rt></ruby>がある<ruby>側<rt>がわ</rt></ruby>を
+          <button type="button" onclick="openWordPicker(7, 0)" id="slot-7" class="blank-slot"></button>
+          と<ruby>言<rt>い</rt></ruby>います。
+        </p>
+
+        <p>
+          ⑦ <ruby>すべて<rt></rt></ruby>を<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>がやってしまうのではなく、<ruby>利用者<rt>りようしゃ</rt></ruby>さんに<ruby>残<rt>のこ</rt></ruby>っている「できる<ruby>力<rt>ちから</rt></ruby>」である
+          <button type="button" onclick="openWordPicker(8, 0)" id="slot-8" class="blank-slot"></button>
+          を<ruby>活<rt>い</rt></ruby>かして<ruby>支援<rt>しえん</rt></ruby>することが、<ruby>自立<rt>じりつ</rt></ruby>（<ruby>自律<rt>じりつ</rt></ruby>）につながります。
+        </p>
+
+        <p>
+          ⑧ ベッドに<ruby>座<rt>すわ</rt></ruby>ったとき（<ruby>端座位<rt>たんざい</rt></ruby>）、<ruby>両方<rt>りょうほう</rt></ruby>の<ruby>足<rt>あし</rt></ruby>の<ruby>裏<rt>うら</rt></ruby>である
+          <button type="button" onclick="openWordPicker(9, 0)" id="slot-9" class="blank-slot"></button>
+          をしっかり<ruby>床<rt>ゆか</rt></ruby>につけ、<ruby>足<rt>あし</rt></ruby>を<ruby>少し<rt>すこし</rt></ruby><ruby>後<rt>うし</rt></ruby>ろに<ruby>引<rt>ひ</rt></ruby>いて、おじぎをするように<ruby>上半身<rt>じょうはんしん</rt></ruby>を
+          <button type="button" onclick="openWordPicker(10, 0)" id="slot-10" class="blank-slot"></button>
+          に<ruby>倒<rt>たお</rt></ruby>すと、<ruby>自然<rt>しぜん</rt></ruby>な<ruby>力<rt>ちから</rt></ruby>でお<ruby>尻<rt>しり</rt></ruby>が<ruby>浮<rt>う</rt></ruby>いて<ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がりやすくなります。
+        </p>
+      </div>
+
+      <!-- パート1 語群一覧プレビュー -->
+      <div class="bg-teal-50 rounded-2xl p-4 border border-teal-200 text-xs">
+        <div class="font-bold text-teal-900 mb-2">
+          <i class="fa-solid fa-list-check mr-1"></i>パート1（【1】〜【10】）のことばリスト（<ruby>語群<rt>ごぐん</rt></ruby>）
+        </div>
+        <div id="bank-preview-0" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" onclick="checkSectionAnswers(0)" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-2xl shadow-sm text-xs sm:text-sm">
+          <i class="fa-solid fa-check-double mr-1"></i>パート1の<ruby>答<rt>こた</rt></ruby>え<ruby>合<rt>あ</rt></ruby>わせ
+        </button>
+        <button type="button" onclick="switchTab(2)" class="w-1/2 bg-teal-700 text-white font-bold py-3.5 rounded-2xl shadow-md text-xs sm:text-sm flex items-center justify-center gap-1 dark-bg">
+          <span>1<ruby>限目<rt>げんめ</rt></ruby>②へ<ruby>進<rt>すす</rt></ruby>む</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: 1限目② 福祉用具と車いすの知識（問11〜問22） ==================== -->
+    <section id="section-2" class="space-y-4 hidden">
+      <div class="bg-teal-900 text-white rounded-2xl p-4 shadow-sm dark-bg flex items-center justify-between">
+        <div>
+          <span class="text-xs bg-amber-400 text-slate-950 font-bold px-2.5 py-0.5 rounded-full">1<ruby>限目<rt>げんめ</rt></ruby>・<ruby>後半<rt>こうはん</rt></ruby>（45<ruby>分<rt>ぷん</rt></ruby>）</span>
+          <h2 class="text-base font-bold mt-1">
+            パート2：<ruby>福祉<rt>ふくし</rt></ruby><ruby>用具<rt>ようぐ</rt></ruby>と<ruby>車<rt>くるま</rt></ruby>いすの<ruby>知識<rt>ちしき</rt></ruby>（【11】〜【22】）
+          </h2>
+        </div>
+        <button type="button" onclick="toggleHint('hint-2')" class="bg-teal-700 hover:bg-teal-600 text-amber-200 text-xs px-3 py-2 rounded-xl border border-teal-500 shrink-0">
+          <i class="fa-solid fa-lightbulb mr-1"></i>ヒント
+        </button>
+      </div>
+
+      <!-- ヒントボックス 2 -->
+      <div id="hint-2" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs sm:text-sm space-y-1.5 text-slate-800">
+        <div class="font-bold text-amber-900"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>ことばのヒント（パート2）</div>
+        <p>・<strong>スライディングボード：</strong> ベッドと<ruby>車<rt>くるま</rt></ruby>いすの<ruby>間<rt>あいだ</rt></ruby>に<ruby>橋<rt>はし</rt></ruby>のように<ruby>渡<rt>わた</rt></ruby>して、<ruby>座<rt>すわ</rt></ruby>ったまま<ruby>滑<rt>すべ</rt></ruby>って<ruby>移乗<rt>いじょう</rt></ruby>する「<ruby>板<rt>いた</rt></ruby>」です。</p>
+        <p>・<strong>スライディングシート：</strong> ベッドの<ruby>上<rt>うえ</rt></ruby>で<ruby>体<rt>からだ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に<ruby>敷<rt>し</rt></ruby>いて、<ruby>摩擦<rt>まさつ</rt></ruby>をなくす「<ruby>滑<rt>すべ</rt></ruby>りやすい<ruby>布<rt>ぬの</rt></ruby>」です。</p>
+        <p>・<strong>ティッピングレバー：</strong> <ruby>段差<rt>だんさ</rt></ruby>を<ruby>越<rt>こ</rt></ruby>えるときに、<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>が<ruby>足<rt>あし</rt></ruby>で<ruby>踏<rt>ふ</rt></ruby>んで<ruby>前輪<rt>ぜんりん</rt></ruby>（キャスター）を<ruby>上<rt>あ</rt></ruby>げる<ruby>部品<rt>ぶひん</rt></ruby>です。</p>
+      </div>
+
+      <!-- 穴埋め問題カード 2 -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-5 text-sm sm:text-base">
+        <div class="border-l-4 border-teal-600 pl-3 font-bold text-slate-800">
+          （1）<ruby>移乗<rt>いじょう</rt></ruby>を<ruby>助<rt>たす</rt></ruby>ける<ruby>福祉<rt>ふくし</rt></ruby><ruby>用具<rt>ようぐ</rt></ruby>の<ruby>選<rt>えら</rt></ruby>び<ruby>方<rt>かた</rt></ruby>
+        </div>
+
+        <p>
+          ① ベッドの<ruby>上<rt>うえ</rt></ruby>で<ruby>寝<rt>ね</rt></ruby>ている<ruby>利用者<rt>りようしゃ</rt></ruby>さんを<ruby>上<rt>うえ</rt></ruby>の<ruby>方<rt>ほう</rt></ruby>へ<ruby>移動<rt>いどう</rt></ruby>するとき、ツルツルした<ruby>布<rt>ぬの</rt></ruby>である
+          <button type="button" onclick="openWordPicker(11, 1)" id="slot-11" class="blank-slot"></button>
+          を<ruby>体<rt>からだ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に<ruby>敷<rt>し</rt></ruby>くと、<ruby>皮膚<rt>ひふ</rt></ruby>がこすれず<ruby>軽<rt>かる</rt></ruby>い<ruby>力<rt>ちから</rt></ruby>で<ruby>動<rt>うご</rt></ruby>かせます。
+        </p>
+
+        <p>
+          ② <ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がることが<ruby>難<rt>むずか</rt></ruby>しくても、<ruby>座<rt>すわ</rt></ruby>るバランス（<ruby>座位<rt>ざい</rt></ruby>）がとれる<ruby>人<rt>ひと</rt></ruby>には、ベッドと<ruby>車<rt>くるま</rt></ruby>いすの<ruby>間<rt>あいだ</rt></ruby>に<ruby>橋<rt>はし</rt></ruby>のように<ruby>渡<rt>わた</rt></ruby>す<ruby>板<rt>いた</rt></ruby>である
+          <button type="button" onclick="openWordPicker(12, 1)" id="slot-12" class="blank-slot"></button>
+          を<ruby>使<rt>つか</rt></ruby>うと、<ruby>座<rt>すわ</rt></ruby>ったまま<ruby>横<rt>よこ</rt></ruby>へ<ruby>滑<rt>すべ</rt></ruby>って<ruby>移乗<rt>いじょう</rt></ruby>できます。そのとき、<ruby>車<rt>くるま</rt></ruby>いすの<ruby>肘掛<rt>ひじか</rt></ruby>けである
+          <button type="button" onclick="openWordPicker(13, 1)" id="slot-13" class="blank-slot"></button>
+          を<ruby>跳<rt>は</rt></ruby>ね<ruby>上<rt>あ</rt></ruby>げる（または<ruby>外<rt>はず</rt></ruby>す）と、じゃまになりません。
+        </p>
+
+        <p>
+          ③ <ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がることはできるけれど、<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>み<ruby>替<rt>か</rt></ruby>えて<ruby>方向<rt>ほうこう</rt></ruby>を<ruby>変<rt>か</rt></ruby>えるのが<ruby>難<rt>むずか</rt></ruby>しい<ruby>人<rt>ひと</rt></ruby>には、<ruby>足<rt>あし</rt></ruby>の<ruby>裏<rt>うら</rt></ruby>の<ruby>下<rt>した</rt></ruby>に<ruby>置<rt>お</rt></ruby>いてクルッと<ruby>回<rt>まわ</rt></ruby>る
+          <button type="button" onclick="openWordPicker(14, 1)" id="slot-14" class="blank-slot"></button>
+          が<ruby>便利<rt>べんり</rt></ruby>です。また、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>力<rt>ちから</rt></ruby>で<ruby>座<rt>すわ</rt></ruby>ることも<ruby>難<rt>むずか</rt></ruby>しい<ruby>重度<rt>じゅうど</rt></ruby>の<ruby>利用者<rt>りようしゃ</rt></ruby>さんには、<ruby>体<rt>からだ</rt></ruby>をシート（<ruby>吊<rt>つ</rt></ruby>り<ruby>具<rt>ぐ</rt></ruby>）で<ruby>包<rt>つつ</rt></ruby>んで<ruby>機械<rt>きかい</rt></ruby>で<ruby>持<rt>も</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げる
+          <button type="button" onclick="openWordPicker(15, 1)" id="slot-15" class="blank-slot"></button>
+          を<ruby>使<rt>つか</rt></ruby>います。
+        </p>
+
+        <hr class="border-slate-200">
+
+        <div class="border-l-4 border-teal-600 pl-3 font-bold text-slate-800">
+          （2）<ruby>車<rt>くるま</rt></ruby>いすの<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>準備<rt>じゅんび</rt></ruby>・<ruby>姿勢<rt>しせい</rt></ruby>・<ruby>移動<rt>いどう</rt></ruby>
+        </div>
+
+        <p>
+          ④ ベッドから<ruby>車<rt>くるま</rt></ruby>いすへ<ruby>移乗<rt>いじょう</rt></ruby>するとき、<ruby>車<rt>くるま</rt></ruby>いすはベッドに<ruby>対<rt>たい</rt></ruby>して<ruby>利用者<rt>りようしゃ</rt></ruby>さんの<ruby>健側<rt>けんそく</rt></ruby>に
+          <button type="button" onclick="openWordPicker(16, 1)" id="slot-16" class="blank-slot"></button>
+          くらいの<ruby>角度<rt>かくど</rt></ruby>で<ruby>置<rt>お</rt></ruby>きます。<ruby>移乗<rt>いじょう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>には、<ruby>車<rt>くるま</rt></ruby>いすが<ruby>動<rt>うご</rt></ruby>かないように<ruby>必<rt>かなら</rt></ruby>ず
+          <button type="button" onclick="openWordPicker(17, 1)" id="slot-17" class="blank-slot"></button>
+          をかけ、<ruby>足<rt>あし</rt></ruby>がぶつからないように<ruby>足乗<rt>あしの</rt></ruby>せである
+          <button type="button" onclick="openWordPicker(18, 1)" id="slot-18" class="blank-slot"></button>
+          を<ruby>上<rt>あ</rt></ruby>げておきます。
+        </p>
+
+        <p>
+          ⑤ <ruby>車<rt>くるま</rt></ruby>いすに<ruby>座<rt>すわ</rt></ruby>ったあと、お<ruby>尻<rt>しり</rt></ruby>が<ruby>前<rt>まえ</rt></ruby>にずれたままの<ruby>浅<rt>あさ</rt></ruby>い<ruby>座<rt>すわ</rt></ruby>り<ruby>方<rt>かた</rt></ruby>である
+          <button type="button" onclick="openWordPicker(19, 1)" id="slot-19" class="blank-slot"></button>
+          になっていると、お<ruby>尻<rt>しり</rt></ruby>や<ruby>背中<rt>せなか</rt></ruby>の<ruby>皮膚<rt>ひふ</rt></ruby>が<ruby>強<rt>つよ</rt></ruby>く<ruby>圧迫<rt>あっぱく</rt></ruby>されて、とずれ（
+          <button type="button" onclick="openWordPicker(20, 1)" id="slot-20" class="blank-slot"></button>
+          ）ができやすくなります。そのため、<ruby>深<rt>ふか</rt></ruby>く<ruby>座<rt>すわ</rt></ruby>り<ruby>直<rt>なお</rt></ruby>したあとに<ruby>背中<rt>せなか</rt></ruby>とシートの<ruby>間<rt>あいだ</rt></ruby>に<ruby>手<rt>て</rt></ruby>を<ruby>入<rt>い</rt></ruby>れて<ruby>服<rt>ふく</rt></ruby>や<ruby>皮膚<rt>ひふ</rt></ruby>のつっぱりをとる
+          <button type="button" onclick="openWordPicker(21, 1)" id="slot-21" class="blank-slot"></button>
+          を<ruby>行<rt>おこな</rt></ruby>います。
+        </p>
+
+        <p>
+          ⑥ <ruby>車<rt>くるま</rt></ruby>いすで<ruby>移動<rt>いどう</rt></ruby>するとき、小さな<ruby>段差<rt>だんさ</rt></ruby>を<ruby>上<rt>のぼ</rt></ruby>るには、<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>が<ruby>後<rt>うし</rt></ruby>ろの<ruby>下<rt>した</rt></ruby>にある
+          <button type="button" onclick="openWordPicker(22, 1)" id="slot-22" class="blank-slot"></button>
+          を<ruby>足<rt>あし</rt></ruby>で<ruby>踏<rt>ふ</rt></ruby>み、グリップを<ruby>下<rt>した</rt></ruby>へ<ruby>押<rt>お</rt></ruby>して<ruby>前輪<rt>ぜんりん</rt></ruby>（キャスター）を<ruby>浮<rt>う</rt></ruby>かせます。
+        </p>
+      </div>
+
+      <!-- パート2 語群一覧プレビュー -->
+      <div class="bg-teal-50 rounded-2xl p-4 border border-teal-200 text-xs">
+        <div class="font-bold text-teal-900 mb-2">
+          <i class="fa-solid fa-list-check mr-1"></i>パート2（【11】〜【22】）のことばリスト（<ruby>語群<rt>ごぐん</rt></ruby>）
+        </div>
+        <div id="bank-preview-1" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" onclick="checkSectionAnswers(1)" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-2xl shadow-sm text-xs sm:text-sm">
+          <i class="fa-solid fa-check-double mr-1"></i>パート2の<ruby>答<rt>こた</rt></ruby>え<ruby>合<rt>あ</rt></ruby>わせ
+        </button>
+        <button type="button" onclick="switchTab(3)" class="w-1/2 bg-teal-700 text-white font-bold py-3.5 rounded-2xl shadow-md text-xs sm:text-sm flex items-center justify-center gap-1 dark-bg">
+          <span>2<ruby>限目<rt>げんめ</rt></ruby>①へ<ruby>進<rt>すす</rt></ruby>む</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: 2限目① 睡眠・移乗・食事のつながり（問23〜問32） ==================== -->
+    <section id="section-3" class="space-y-4 hidden">
+      <div class="bg-teal-900 text-white rounded-2xl p-4 shadow-sm dark-bg flex items-center justify-between">
+        <div>
+          <span class="text-xs bg-amber-400 text-slate-950 font-bold px-2.5 py-0.5 rounded-full">2<ruby>限目<rt>げんめ</rt></ruby>・<ruby>前半<rt>ぜんはん</rt></ruby>（45<ruby>分<rt>ぷん</rt></ruby>）</span>
+          <h2 class="text-base font-bold mt-1">
+            パート3：<ruby>睡眠<rt>すいみん</rt></ruby>・<ruby>移乗<rt>いじょう</rt></ruby>・<ruby>食事<rt>しょくじ</rt></ruby>のつながり（【23】〜【32】）
+          </h2>
+        </div>
+        <button type="button" onclick="toggleHint('hint-3')" class="bg-teal-700 hover:bg-teal-600 text-amber-200 text-xs px-3 py-2 rounded-xl border border-teal-500 shrink-0">
+          <i class="fa-solid fa-lightbulb mr-1"></i>ヒント
+        </button>
+      </div>
+
+      <!-- ヒントボックス 3 -->
+      <div id="hint-3" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs sm:text-sm space-y-1.5 text-slate-800">
+        <div class="font-bold text-amber-900"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>ことばのヒント（パート3）</div>
+        <p>・<strong>ポジショニング：</strong> クッション（ピロー）などを<ruby>使<rt>つか</rt></ruby>って、<ruby>体<rt>からだ</rt></ruby>の<ruby>緊張<rt>きんちょう</rt></ruby>をゆるめ、<ruby>安楽<rt>あんらく</rt></ruby>で<ruby>心地<rt>ここち</rt></ruby>よい<ruby>姿勢<rt>しせい</rt></ruby>に<ruby>整<rt>ととの</rt></ruby>えることです。</p>
+        <p>・<strong><ruby>離床<rt>りしょう</rt></ruby>：</strong> ベッドから<ruby>起<rt>お</rt></ruby>き<ruby>上<rt>あ</rt></ruby>がり、<ruby>車<rt>くるま</rt></ruby>いすなどに<ruby>移<rt>うつ</rt></ruby>って<ruby>生活<rt>せいかつ</rt></ruby>することです。</p>
+        <p>・<strong><ruby>誤嚥<rt>ごえん</rt></ruby>：</strong> <ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>や<ruby>水分<rt>すいぶん</rt></ruby>が、<ruby>食道<rt>しょくどう</rt></ruby>ではなく<ruby>空気<rt>くうき</rt></ruby>の<ruby>通<rt>とお</rt></ruby>り<ruby>道<rt>みち</rt></ruby>（<ruby>気管<rt>きかん</rt></ruby>）に<ruby>入<rt>はい</rt></ruby>ってしまうことです。</p>
+      </div>
+
+      <!-- 穴埋め問題カード 3 -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-5 text-sm sm:text-base">
+        <div class="border-l-4 border-amber-500 pl-3 font-bold text-slate-800">
+          （1）<ruby>心地<rt>ここち</rt></ruby>よい<ruby>休息<rt>きゅうそく</rt></ruby>・<ruby>睡眠<rt>すいみん</rt></ruby>と<ruby>昼間<rt>ひるま</rt></ruby>の<ruby>活動<rt>かつどう</rt></ruby>
+        </div>
+
+        <p>
+          ① <ruby>夜<rt>よる</rt></ruby>にベッドで<ruby>寝<rt>ね</rt></ruby>るとき、<ruby>麻痺<rt>まひ</rt></ruby>や<ruby>拘縮<rt>こうしゅく</rt></ruby>がある<ruby>場所<rt>ばしょ</rt></ruby>とマットレスのすきまにクッション（ピロー）を<ruby>入<rt>い</rt></ruby>れて、<ruby>筋肉<rt>きんにく</rt></ruby>の<ruby>緊張<rt>きんちょう</rt></ruby>をゆるめる<ruby>姿勢<rt>しせい</rt></ruby><ruby>調整<rt>ちょうせい</rt></ruby>を
+          <button type="button" onclick="openWordPicker(23, 2)" id="slot-23" class="blank-slot"></button>
+          と<ruby>言<rt>い</rt></ruby>います。
+        </p>
+
+        <p>
+          ② <ruby>朝<rt>あさ</rt></ruby>にカーテンを<ruby>開<rt>あ</rt></ruby>けて<ruby>太陽<rt>たいよう</rt></ruby>の<ruby>光<rt>ひかり</rt></ruby>を<ruby>浴<rt>あ</rt></ruby>びると、<ruby>体<rt>からだ</rt></ruby>のなかにある24<ruby>時間<rt>じかん</rt></ruby>のリズムである
+          <button type="button" onclick="openWordPicker(24, 2)" id="slot-24" class="blank-slot"></button>
+          が<ruby>整<rt>ととの</rt></ruby>います。そして、<ruby>昼間<rt>ひるま</rt></ruby>はベッドから<ruby>離<rt>はな</rt></ruby>れて<ruby>起<rt>お</rt></ruby>きる
+          <button type="button" onclick="openWordPicker(25, 2)" id="slot-25" class="blank-slot"></button>
+          を<ruby>促<rt>うなが</rt></ruby>し、<ruby>車<rt>くるま</rt></ruby>いすで<ruby>移動<rt>いどう</rt></ruby>して<ruby>活動<rt>かつどう</rt></ruby>すると、<ruby>夜<rt>よる</rt></ruby>にぐっすり<ruby>眠<rt>ねむ</rt></ruby>れるようになります。
+        </p>
+
+        <p>
+          ③ <ruby>夜<rt>よる</rt></ruby>によく<ruby>眠<rt>ねむ</rt></ruby>れていないと、<ruby>昼間<rt>ひるま</rt></ruby>の<ruby>食事<rt>しょくじ</rt></ruby>のときに<ruby>頭<rt>あたま</rt></ruby>がぼんやりして、<ruby>目<rt>め</rt></ruby>がしっかり<ruby>覚<rt>さ</rt></ruby>めている<ruby>状態<rt>じょうたい</rt></ruby>である
+          <button type="button" onclick="openWordPicker(26, 2)" id="slot-26" class="blank-slot"></button>
+          レベルが<ruby>下<rt>さ</rt></ruby>がってしまい、むせやすくなり<ruby>危険<rt>きけん</rt></ruby>です。
+        </p>
+
+        <hr class="border-slate-200">
+
+        <div class="border-l-4 border-amber-500 pl-3 font-bold text-slate-800">
+          （2）<ruby>移乗<rt>いじょう</rt></ruby><ruby>後<rt>ご</rt></ruby>の<ruby>姿勢<rt>しせい</rt></ruby>と「<ruby>自律<rt>じりつ</rt></ruby>に<ruby>向<rt>む</rt></ruby>けた<ruby>食事<rt>しょくじ</rt></ruby><ruby>介助<rt>かいじょ</rt></ruby>」
+        </div>
+
+        <p>
+          ④ <ruby>食事<rt>しょくじ</rt></ruby>をするとき、お<ruby>尻<rt>しり</rt></ruby>が<ruby>前<rt>まえ</rt></ruby>にずれた<ruby>浅<rt>あさ</rt></ruby>い<ruby>座<rt>すわ</rt></ruby>り<ruby>方<rt>かた</rt></ruby>になると、<ruby>首<rt>くび</rt></ruby>が<ruby>後<rt>うし</rt></ruby>ろに<ruby>反<rt>そ</rt></ruby>って
+          <button type="button" onclick="openWordPicker(27, 2)" id="slot-27" class="blank-slot"></button>
+          が<ruby>上<rt>あ</rt></ruby>がり、<ruby>気管<rt>きかん</rt></ruby>が<ruby>開<rt>ひら</rt></ruby>きやすくなります。その<ruby>結果<rt>けっか</rt></ruby>、<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>が<ruby>気管<rt>きかん</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ってしまう
+          <button type="button" onclick="openWordPicker(28, 2)" id="slot-28" class="blank-slot"></button>
+          の<ruby>危険<rt>きけん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>まります。
+        </p>
+
+        <p>
+          ⑤ <ruby>車<rt>くるま</rt></ruby>いすやいすに<ruby>深<rt>ふか</rt></ruby>く<ruby>座<rt>すわ</rt></ruby>り、<ruby>両方<rt>りょうほう</rt></ruby>の<ruby>足<rt>あし</rt></ruby>の<ruby>裏<rt>うら</rt></ruby>を<ruby>床<rt>ゆか</rt></ruby>につける
+          <button type="button" onclick="openWordPicker(29, 2)" id="slot-29" class="blank-slot"></button>
+          をすると、<ruby>上半身<rt>じょうはんしん</rt></ruby>が<ruby>安定<rt>あんてい</rt></ruby>して<ruby>腕<rt>うで</rt></ruby>を<ruby>動<rt>うご</rt></ruby>かしやすくなり、<ruby>噛<rt>か</rt></ruby>む<ruby>力<rt>ちから</rt></ruby>も<ruby>強<rt>つよ</rt></ruby>くなります。
+        </p>
+
+        <p>
+          ⑥ <ruby>片手<rt>かたて</rt></ruby>しか<ruby>使<rt>つか</rt></ruby>えない<ruby>人<rt>ひと</rt></ruby>や<ruby>指<rt>ゆび</rt></ruby>の<ruby>力<rt>ちから</rt></ruby>が<ruby>弱<rt>よわ</rt></ruby>い<ruby>人<rt>ひと</rt></ruby>には、<ruby>太<rt>ふと</rt></ruby>い<ruby>柄<rt>え</rt></ruby>のスプーンやすべり<ruby>止<rt>ど</rt></ruby>めマットなどの
+          <button type="button" onclick="openWordPicker(30, 2)" id="slot-30" class="blank-slot"></button>
+          を<ruby>活用<rt>かつよう</rt></ruby>します。これにより、「<ruby>自分<rt>じぶん</rt></ruby>で<ruby>選<rt>えら</rt></ruby>んで、<ruby>自分<rt>じぶん</rt></ruby>のペースで<ruby>食<rt>た</rt></ruby>べる」という
+          <button type="button" onclick="openWordPicker(31, 2)" id="slot-31" class="blank-slot"></button>
+          を<ruby>支<rt>ささ</rt></ruby>えることができます。
+        </p>
+
+        <p>
+          ⑦ <ruby>食事<rt>しょくじ</rt></ruby>の<ruby>介助<rt>かいじょ</rt></ruby>をするとき、<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>が<ruby>立<rt>た</rt></ruby>ったまま<ruby>上<rt>うえ</rt></ruby>から<ruby>食<rt>た</rt></ruby>べさせると、<ruby>利用者<rt>りようしゃ</rt></ruby>さんは<ruby>上<rt>うえ</rt></ruby>を<ruby>向<rt>む</rt></ruby>いてしまい<ruby>危険<rt>きけん</rt></ruby>です。<ruby>必<rt>かなら</rt></ruby>ずいすに<ruby>座<rt>すわ</rt></ruby>って<ruby>利用者<rt>りようしゃ</rt></ruby>さんと
+          <button type="button" onclick="openWordPicker(32, 2)" id="slot-32" class="blank-slot"></button>
+          の<ruby>高<rt>たか</rt></ruby>さを<ruby>合<rt>あ</rt></ruby>わせ、<ruby>下<rt>した</rt></ruby>からスプーンを<ruby>運<rt>はこ</rt></ruby>びます。
+        </p>
+      </div>
+
+      <!-- パート3 語群一覧プレビュー -->
+      <div class="bg-teal-50 rounded-2xl p-4 border border-teal-200 text-xs">
+        <div class="font-bold text-teal-900 mb-2">
+          <i class="fa-solid fa-list-check mr-1"></i>パート3（【23】〜【32】）のことばリスト（<ruby>語群<rt>ごぐん</rt></ruby>）
+        </div>
+        <div id="bank-preview-2" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" onclick="checkSectionAnswers(2)" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-2xl shadow-sm text-xs sm:text-sm">
+          <i class="fa-solid fa-check-double mr-1"></i>パート3の<ruby>答<rt>こた</rt></ruby>え<ruby>合<rt>あ</rt></ruby>わせ
+        </button>
+        <button type="button" onclick="switchTab(4)" class="w-1/2 bg-teal-700 text-white font-bold py-3.5 rounded-2xl shadow-md text-xs sm:text-sm flex items-center justify-center gap-1 dark-bg">
+          <span>2<ruby>限目<rt>げんめ</rt></ruby>②へ<ruby>進<rt>すす</rt></ruby>む</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: 2限目② 総合事例の穴埋め＆声かけワーク（問33〜問40） ==================== -->
+    <section id="section-4" class="space-y-4 hidden">
+      <div class="bg-teal-900 text-white rounded-2xl p-4 shadow-sm dark-bg flex items-center justify-between">
+        <div>
+          <span class="text-xs bg-amber-400 text-slate-950 font-bold px-2.5 py-0.5 rounded-full">2<ruby>限目<rt>げんめ</rt></ruby>・<ruby>後半<rt>こうはん</rt></ruby>（45<ruby>分<rt>ぷん</rt></ruby>）</span>
+          <h2 class="text-base font-bold mt-1">
+            パート4：<ruby>佐藤<rt>さとう</rt></ruby>さんの<ruby>事例<rt>じれい</rt></ruby>と<ruby>声<rt>こえ</rt></ruby>かけ<ruby>穴埋<rt>あなう</rt></ruby>め（【33】〜【40】）
+          </h2>
+        </div>
+        <button type="button" onclick="toggleHint('hint-4')" class="bg-teal-700 hover:bg-teal-600 text-amber-200 text-xs px-3 py-2 rounded-xl border border-teal-500 shrink-0">
+          <i class="fa-solid fa-lightbulb mr-1"></i>ヒント
+        </button>
+      </div>
+
+      <!-- ヒントボックス 4 -->
+      <div id="hint-4" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-4 text-xs sm:text-sm space-y-1.5 text-slate-800">
+        <div class="font-bold text-amber-900"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i><ruby>佐藤<rt>さとう</rt></ruby>さんの<ruby>事例<rt>じれい</rt></ruby>のポイント</div>
+        <p>・<ruby>佐藤<rt>さとう</rt></ruby>さんは<strong>「<ruby>左片麻痺<rt>ひだりかたまひ</rt></ruby>」</strong>なので、<ruby>麻痺<rt>まひ</rt></ruby>がない<strong>「<ruby>右側<rt>みぎがわ</rt></ruby>」</strong>が<ruby>健側<rt>けんそく</rt></ruby>です。</p>
+        <p>・スロープ（<ruby>坂道<rt>さかみち</rt></ruby>）を<ruby>下<rt>お</rt></ruby>りるときは、<ruby>利用者<rt>りようしゃ</rt></ruby>さんが<ruby>前<rt>まえ</rt></ruby>に<ruby>落<rt>お</rt></ruby>ちないように<strong>「<ruby>後<rt>うし</rt></ruby>ろ<ruby>向<rt>む</rt></ruby>き」</strong>でゆっくり<ruby>進<rt>すす</rt></ruby>みます。</p>
+      </div>
+
+      <!-- 事例紹介ボックス -->
+      <div class="bg-slate-800 text-white rounded-2xl p-4 shadow-sm space-y-2 dark-bg text-xs sm:text-sm">
+        <div class="font-bold text-amber-300 text-base flex items-center gap-2">
+          <i class="fa-solid fa-person-cane"></i>
+          <span><ruby>事例<rt>じれい</rt></ruby>：<ruby>佐藤<rt>さとう</rt></ruby> ハルさん（80<ruby>歳<rt>さい</rt></ruby>・<ruby>左片麻痺<rt>ひだりかたまひ</rt></ruby>）</span>
+        </div>
+        <p>
+          <ruby>佐藤<rt>さとう</rt></ruby>さんは<ruby>脳梗塞<rt>のうこうそく</rt></ruby>のため、<ruby>左<rt>ひだり</rt></ruby>の<ruby>手足<rt>てあし</rt></ruby>に<ruby>麻痺<rt>まひ</rt></ruby>（<ruby>左片麻痺<rt>ひだりかたまひ</rt></ruby>）があります。<ruby>右手<rt>みぎて</rt></ruby>と<ruby>右足<rt>みぎあし</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>に<ruby>動<rt>うご</rt></ruby>きますが、「<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>さんに<ruby>重<rt>おも</rt></ruby>い<ruby>体<rt>からだ</rt></ruby>を<ruby>抱<rt>かか</rt></ruby>えてもらうのは<ruby>申<rt>もう</rt></ruby>し<ruby>訳<rt>わけ</rt></ruby>ない」と<ruby>遠慮<rt>えんりょ</rt></ruby>して、ベッドの<ruby>上<rt>うえ</rt></ruby>で<ruby>食事<rt>しょくじ</rt></ruby>をしようとしています。
+        </p>
+      </div>
+
+      <!-- 穴埋め問題カード 4 -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-5 text-sm sm:text-base">
+        <div class="border-l-4 border-teal-600 pl-3 font-bold text-slate-800">
+          （1）<ruby>佐藤<rt>さとう</rt></ruby>さんへの<ruby>移乗<rt>いじょう</rt></ruby>・<ruby>移動<rt>いどう</rt></ruby>・<ruby>食事<rt>しょくじ</rt></ruby><ruby>支援<rt>しえん</rt></ruby>プラン
+        </div>
+
+        <p>
+          ① <ruby>佐藤<rt>さとう</rt></ruby>さんは<ruby>左片麻痺<rt>ひだりかたまひ</rt></ruby>なので、<ruby>車<rt>くるま</rt></ruby>いすはベッドに<ruby>座<rt>すわ</rt></ruby>った<ruby>佐藤<rt>さとう</rt></ruby>さんの<ruby>健側<rt>けんそく</rt></ruby>である
+          <button type="button" onclick="openWordPicker(33, 3)" id="slot-33" class="blank-slot"></button>
+          に<ruby>置<rt>お</rt></ruby>きます。そして、<ruby>元気<rt>げんき</rt></ruby>な<ruby>右手<rt>みぎて</rt></ruby>でベッドの<ruby>手<rt>て</rt></ruby>すりである
+          <button type="button" onclick="openWordPicker(34, 3)" id="slot-34" class="blank-slot"></button>
+          をつかんでもらい、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>力<rt>ちから</rt></ruby>も<ruby>使<rt>つか</rt></ruby>って<ruby>安心<rt>あんしん</rt></ruby>して<ruby>移乗<rt>いじょう</rt></ruby>してもらいます。
+        </p>
+
+        <p>
+          ② <ruby>移乗<rt>いじょう</rt></ruby>するとき、感覚がわかりにくい<ruby>麻痺側<rt>まひがわ</rt></ruby>の
+          <button type="button" onclick="openWordPicker(35, 3)" id="slot-35" class="blank-slot"></button>
+          が<ruby>車<rt>くるま</rt></ruby>いすにぶつかったり、<ruby>体<rt>からだ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に<ruby>挟<rt>はさ</rt></ruby>まれたりしないように<ruby>気<rt>き</rt></ruby>をつけます。
+        </p>
+
+        <p>
+          ③ <ruby>車<rt>くるま</rt></ruby>いすで<ruby>食堂<rt>しょくどう</rt></ruby>へ<ruby>移動<rt>いどう</rt></ruby>するとき、エレベーターの<ruby>中<rt>なか</rt></ruby>や<ruby>急<rt>きゅう</rt></ruby>なスロープ（<ruby>下<rt>くだ</rt></ruby>り<ruby>坂<rt>ざか</rt></ruby>）を<ruby>下<rt>お</rt></ruby>りるときは、<ruby>佐藤<rt>さとう</rt></ruby>さんが<ruby>前<rt>まえ</rt></ruby>へ<ruby>転落<rt>てんらく</rt></ruby>しないように、<ruby>介護福祉士<rt>かいごふくしし</rt></ruby>が<ruby>先<rt>さき</rt></ruby>に<ruby>立<rt>た</rt></ruby>って
+          <button type="button" onclick="openWordPicker(36, 3)" id="slot-36" class="blank-slot"></button>
+          でゆっくり<ruby>車<rt>くるま</rt></ruby>いすを<ruby>支<rt>ささ</rt></ruby>えながら<ruby>進<rt>すす</rt></ruby>みます。
+        </p>
+
+        <p>
+          ④ <ruby>食堂<rt>しょくどう</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、<ruby>佐藤<rt>さとう</rt></ruby>さんの<ruby>左手<rt>ひだりて</rt></ruby>がだらんと<ruby>下<rt>した</rt></ruby>がって<ruby>肩<rt>かた</rt></ruby>が<ruby>外<rt>はず</rt></ruby>れる（<ruby>亜脱臼<rt>あだっきゅう</rt></ruby>）のを<ruby>防<rt>ふせ</rt></ruby>ぐため、<ruby>左手<rt>ひだりて</rt></ruby>をクッションや
+          <button type="button" onclick="openWordPicker(37, 3)" id="slot-37" class="blank-slot"></button>
+          の<ruby>上<rt>うえ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>せて<ruby>安定<rt>あんてい</rt></ruby>させます。そして、お<ruby>皿<rt>さら</rt></ruby>の<ruby>下<rt>した</rt></ruby>に
+          <button type="button" onclick="openWordPicker(38, 3)" id="slot-38" class="blank-slot"></button>
+          を<ruby>敷<rt>し</rt></ruby>くと、<ruby>右手<rt>みぎて</rt></ruby>だけでもお<ruby>皿<rt>さら</rt></ruby>が<ruby>動<rt>うご</rt></ruby>かず、<ruby>自分<rt>じぶん</rt></ruby>でおいしく<ruby>食<rt>た</rt></ruby>べられます。
+        </p>
+
+        <hr class="border-slate-200">
+
+        <div class="border-l-4 border-amber-500 pl-3 font-bold text-slate-800">
+          （2）<ruby>佐藤<rt>さとう</rt></ruby>さんへの「やさしい<ruby>声<rt>こえ</rt></ruby>かけ」を<ruby>完成<rt>かんせい</rt></ruby>させよう
+        </div>
+
+        <div class="bg-amber-50/70 rounded-xl p-4 border border-amber-200 space-y-2">
+          <div class="text-xs font-bold text-amber-900">
+            <i class="fa-solid fa-comment-dots mr-1"></i><ruby>介護福祉士<rt>かいごふくしし</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>かけセリフ：
+          </div>
+          <p>
+            「<ruby>佐藤<rt>さとう</rt></ruby>さん、スライディングボードを<ruby>使<rt>つか</rt></ruby>うと、<ruby>抱<rt>かか</rt></ruby>え<ruby>上<rt>あ</rt></ruby>げずに<ruby>滑<rt>すべ</rt></ruby>って<ruby>移<rt>うつ</rt></ruby>れるので、<ruby>私<rt>わたし</rt></ruby>も<ruby>重<rt>おも</rt></ruby>くないですよ。だから
+            <button type="button" onclick="openWordPicker(39, 3)" id="slot-39" class="blank-slot"></button>
+            してくださいね。<ruby>佐藤<rt>さとう</rt></ruby>さんの<ruby>力<rt>ちから</rt></ruby>がある<ruby>右手<rt>みぎて</rt></ruby>で<ruby>手<rt>て</rt></ruby>すりをつかんで、いっしょに
+            <button type="button" onclick="openWordPicker(40, 3)" id="slot-40" class="blank-slot"></button>
+            へ<ruby>行<rt>い</rt></ruby>って<ruby>温<rt>あたた</rt></ruby>かいご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べませんか？」
+          </p>
+        </div>
+
+        <!-- グループディスカッション・まとめ記述 -->
+        <div class="space-y-2 pt-2">
+          <label class="block text-sm font-bold text-slate-800">
+            （3）180<ruby>分<rt>ぷん</rt></ruby>のまとめ：なぜベッドの<ruby>上<rt>うえ</rt></ruby>ではなく、<ruby>車<rt>くるま</rt></ruby>いすへ<ruby>移乗<rt>いじょう</rt></ruby>して<ruby>食事<rt>しょくじ</rt></ruby>をすることが<ruby>大切<rt>たいせつ</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>いますか？
+          </label>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="insertTemplate('summary_note', 'くるまいすに ただしい しせいで すわると、あしのうらが ゆかについて むせずに じぶんの ちからで たべられるからです。また、ひるまに うごくと よるも ぐっすり ねむれます。')" class="bg-teal-50 border border-teal-300 rounded-lg px-2.5 py-1 text-xs text-teal-900">
+              ＋ まとめの<ruby>例文<rt>れいぶん</rt></ruby>を<ruby>入<rt>い</rt></ruby>れる
+            </button>
+          </div>
+          <textarea id="summary_note" oninput="saveData()" rows="3" placeholder="ここに あなたの かんがえを かいてください（ひらがな・かんじ どちらもOK）" class="w-full rounded-xl border border-slate-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600"></textarea>
+        </div>
+      </div>
+
+      <!-- パート4 語群一覧プレビュー -->
+      <div class="bg-teal-50 rounded-2xl p-4 border border-teal-200 text-xs">
+        <div class="font-bold text-teal-900 mb-2">
+          <i class="fa-solid fa-list-check mr-1"></i>パート4（【33】〜【40】）のことばリスト（<ruby>語群<rt>ごぐん</rt></ruby>）
+        </div>
+        <div id="bank-preview-3" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" onclick="checkSectionAnswers(3)" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-2xl shadow-sm text-xs sm:text-sm">
+          <i class="fa-solid fa-check-double mr-1"></i>パート4の<ruby>答<rt>こた</rt></ruby>え<ruby>合<rt>あ</rt></ruby>わせ
+        </button>
+        <button type="button" onclick="switchTab(5)" class="w-1/2 bg-teal-700 text-white font-bold py-3.5 rounded-2xl shadow-md text-xs sm:text-sm flex items-center justify-center gap-1 dark-bg">
+          <span><ruby>採点<rt>さいてん</rt></ruby>・<ruby>提出<rt>ていしゅつ</rt></ruby>へ</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: 採点・提出 ==================== -->
+    <section id="section-5" class="space-y-5 hidden">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between border-b pb-3">
+          <h3 class="font-bold text-base text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-award text-amber-500 text-xl"></i>
+            <span><ruby>全<rt>ぜん</rt></ruby>40<ruby>問<rt>もん</rt></ruby>のスコアチェック</span>
+          </h3>
+          <button type="button" onclick="checkAllAnswers()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-xs">
+            <i class="fa-solid fa-magnifying-glass-chart mr-1"></i>すべて<ruby>採点<rt>さいてん</rt></ruby>する
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-center">
+          <div class="bg-teal-50 border border-teal-200 rounded-xl p-3">
+            <div class="text-xs text-slate-600"><ruby>埋<rt>う</rt></ruby>めた<ruby>問題<rt>もんだい</rt></ruby>の<ruby>数<rt>かず</rt></ruby></div>
+            <div class="text-xl font-bold text-teal-800 mt-0.5">
+              <span id="summary-filled">0</span> / 40<ruby>問<rt>もん</rt></ruby>
+            </div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3">
+            <div class="text-xs text-slate-600"><ruby>正解<rt>せいかい</rt></ruby>した<ruby>数<rt>かず</rt></ruby></div>
+            <div class="text-xl font-bold text-amber-800 mt-0.5">
+              <span id="summary-score">--</span> / 40<ruby>点<rt>てん</rt></ruby>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600">
+          ※<ruby>間違<rt>まちが</rt></ruby>えた<ruby>問題<rt>もんだい</rt></ruby>（<ruby>赤色<rt>あかいろ</rt></ruby>の<ruby>枠<rt>わく</rt></ruby>）は、もう<ruby>一度<rt>いちど</rt></ruby>タップして<ruby>何度<rt>なんど</rt></ruby>でも<ruby>直<rt>なお</rt></ruby>すことができます。40<ruby>点<rt>てん</rt></ruby><ruby>満点<rt>まんてん</rt></ruby>を<ruby>目指<rt>めざ</rt></ruby>しましょう！
+        </p>
+      </div>
+
+      <!-- 提出ボックス -->
+      <div class="bg-teal-900 text-white rounded-2xl p-5 shadow-lg space-y-4 dark-bg">
+        <div class="flex items-start gap-3">
+          <i class="fa-solid fa-mobile-screen-button text-amber-400 text-2xl mt-1"></i>
+          <div>
+            <h3 class="font-bold text-base"><ruby>先生<rt>せんせい</rt></ruby>へ<ruby>提出<rt>ていしゅつ</rt></ruby>する</h3>
+            <p class="text-xs text-teal-100">
+              <ruby>下<rt>した</rt></ruby>のボタンをおすと、あなたの<ruby>名前<rt>なまえ</rt></ruby>と【1】〜【40】のすべての<ruby>解答<rt>かいとう</rt></ruby>・スコアがコピーされます。Google Classroom や Teams、Forms などに<ruby>貼<rt>は</rt></ruby>り<ruby>付<rt>つ</rt></ruby>けて<ruby>提出<rt>ていしゅつ</rt></ruby>してください。
+            </p>
+          </div>
+        </div>
+
+        <button type="button" onclick="generateReport()" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold py-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition text-sm sm:text-base">
+          <i class="fa-solid fa-copy"></i>
+          <span><ruby>提出<rt>ていしゅつ</rt></ruby><ruby>用<rt>よう</rt></ruby>の<ruby>解答<rt>かいとう</rt></ruby>テキストをコピーする</span>
+        </button>
+
+        <div id="report-preview-box" class="hidden space-y-2 pt-2">
+          <div class="flex items-center justify-between text-xs text-teal-200">
+            <span>▼ コピーされました！</span>
+            <button type="button" onclick="downloadTextFile()" class="underline text-amber-300 font-bold">
+              <i class="fa-solid fa-download mr-1"></i>ファイル（.txt）で<ruby>保存<rt>ほぞん</rt></ruby>
+            </button>
+          </div>
+          <textarea id="report-output" readonly rows="9" class="w-full rounded-xl bg-teal-950 text-teal-100 p-3 text-xs font-mono border border-teal-700"></textarea>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Sheet Modal: Word Bank Picker (語群ピッカー) -->
+  <div id="picker-backdrop" onclick="closeWordPicker()" class="fixed inset-0 bg-slate-900/50 z-40 hidden backdrop-blur-xs"></div>
+  <div id="picker-sheet" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 transform translate-y-full transition-transform duration-300 max-h-[75vh] flex flex-col border-t-4 border-teal-600">
+    <div class="max-w-xl w-full mx-auto px-4 pt-3 pb-2 flex items-center justify-between border-b border-slate-200">
+      <div class="font-bold text-sm sm:text-base text-teal-900 flex items-center gap-2">
+        <span id="picker-title-badge" class="bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-lg text-xs font-bold">【 1 】</span>
+        <span>に<ruby>入<rt>はい</rt></ruby>ることばをタップ！</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="clearCurrentSlot()" class="text-xs text-rose-600 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-lg font-bold">
+          <ruby>空欄<rt>くうらん</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>す
+        </button>
+        <button type="button" onclick="closeWordPicker()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="max-w-xl w-full mx-auto p-4 overflow-y-auto grid grid-cols-2 gap-2.5 text-xs sm:text-sm" id="picker-options">
+      <!-- Populated dynamically with ruby HTML -->
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-full shadow-lg flex items-center gap-2 opacity-0 pointer-events-none transition-opacity duration-300 z-50 dark-bg w-11/12 max-w-sm justify-center">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-base shrink-0"></i>
+    <span id="toast-msg"><ruby>保存<rt>ほぞん</rt></ruby>しました</span>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'care_fill_blank_180m_v1';
+
+    // 4つのパートの語群と正解データ（すべてルビ付き）
+    const WORD_BANKS = [
+      // Section 0 (Part 1: Q1 - Q10)
+      [
+        { key: '支持基底面（しじきていめん）', html: '<ruby>支持基底面<rt>しじきていめん</rt></ruby>' },
+        { key: '重心（じゅうしん）', html: '<ruby>重心<rt>じゅうしん</rt></ruby>' },
+        { key: '摩擦（まさつ）', html: '<ruby>摩擦<rt>まさつ</rt></ruby>' },
+        { key: 'トルク（かいてんりょく）', html: 'トルク（<ruby>回転力<rt>かいてんりょく</rt></ruby>）' },
+        { key: '同意（どうい）', html: '<ruby>同意<rt>どうい</rt></ruby>' },
+        { key: '健側（けんそく）', html: '<ruby>健側<rt>けんそく</rt></ruby>' },
+        { key: '患側（かんそく）', html: '<ruby>患側<rt>かんそく</rt></ruby>' },
+        { key: '残存機能（ざんぞんきのう）', html: '<ruby>残存機能<rt>ざんぞんきのう</rt></ruby>' },
+        { key: '足底（そくてい）', html: '<ruby>足底<rt>そくてい</rt></ruby>' },
+        { key: '前かがみ（まえかがみ）', html: '<ruby>前<rt>まえ</rt></ruby>かがみ' }
+      ],
+      // Section 1 (Part 2: Q11 - Q22)
+      [
+        { key: 'スライディングシート', html: 'スライディングシート' },
+        { key: 'スライディングボード', html: 'スライディングボード' },
+        { key: 'アームサポート', html: 'アームサポート' },
+        { key: '回転盤（かいてんばん）', html: '<ruby>回転盤<rt>かいてんばん</rt></ruby>' },
+        { key: '介護用リフト（かいごようリフト）', html: '<ruby>介護用<rt>かいごよう</rt></ruby>リフト' },
+        { key: '20〜30度（ど）', html: '20〜30<ruby>度<rt>ど</rt></ruby>' },
+        { key: 'ブレーキ', html: 'ブレーキ' },
+        { key: 'フットサポート', html: 'フットサポート' },
+        { key: '仙骨座り（せんこつずわり）', html: '<ruby>仙骨座<rt>せんこつずわ</rt></ruby>り' },
+        { key: '褥瘡（じょくそう）', html: '<ruby>褥瘡<rt>じょくそう</rt></ruby>' },
+        { key: '背抜き（せぬき）', html: '<ruby>背抜<rt>せぬ</rt></ruby>き' },
+        { key: 'ティッピングレバー', html: 'ティッピングレバー' }
+      ],
+      // Section 2 (Part 3: Q23 - Q32)
+      [
+        { key: 'ポジショニング', html: 'ポジショニング' },
+        { key: '体内時計（たいないどけい）', html: '<ruby>体内時計<rt>たいないどけい</rt></ruby>' },
+        { key: '離床（りしょう）', html: '<ruby>離床<rt>りしょう</rt></ruby>' },
+        { key: '覚醒（かくせい）', html: '<ruby>覚醒<rt>かくせい</rt></ruby>' },
+        { key: '顎（あご）', html: '<ruby>顎<rt>あご</rt></ruby>' },
+        { key: '誤嚥（ごえん）', html: '<ruby>誤嚥<rt>ごえん</rt></ruby>' },
+        { key: '足底接地（そくていせっち）', html: '<ruby>足底接地<rt>そくていせっち</rt></ruby>' },
+        { key: '自助具（じじょぐ）', html: '<ruby>自助具<rt>じじょぐ</rt></ruby>' },
+        { key: '自律（じりつ）', html: '<ruby>自律<rt>じりつ</rt></ruby>' },
+        { key: '目線（めせん）', html: '<ruby>目線<rt>めせん</rt></ruby>' }
+      ],
+      // Section 3 (Part 4: Q33 - Q40)
+      [
+        { key: '右側（みぎがわ）', html: '<ruby>右側<rt>みぎがわ</rt></ruby>' },
+        { key: 'L字バー（介助バー）', html: 'L<ruby>字<rt>じ</rt></ruby>バー（<ruby>介助<rt>かいじょ</rt></ruby>バー）' },
+        { key: '左手・左足（ひだりて・ひだりあし）', html: '<ruby>左手<rt>ひだりて</rt></ruby>・<ruby>左足<rt>ひだりあし</rt></ruby>' },
+        { key: '後ろ向き（うしろむき）', html: '<ruby>後<rt>うし</rt></ruby>ろ<ruby>向<rt>む</rt></ruby>き' },
+        { key: 'テーブル', html: 'テーブル' },
+        { key: '滑り止めマット（すべりどめマット）', html: '<ruby>滑<rt>すべ</rt></ruby>り<ruby>止<rt>ど</rt></ruby>めマット' },
+        { key: '安心（あんしん）', html: '<ruby>安心<rt>あんしん</rt></ruby>' },
+        { key: '食堂（しょくどう）', html: '<ruby>食堂<rt>しょくどう</rt></ruby>' }
+      ]
+    ];
+
+    // 各空欄（1〜40）の正解キー
+    const CORRECT_ANSWERS = {
+      1: '支持基底面（しじきていめん）',
+      2: '重心（じゅうしん）',
+      3: '摩擦（まさつ）',
+      4: 'トルク（かいてんりょく）',
+      5: '同意（どうい）',
+      6: '健側（けんそく）',
+      7: '患側（かんそく）',
+      8: '残存機能（ざんぞんきのう）',
+      9: '足底（そくてい）',
+      10: '前かがみ（まえかがみ）',
+      11: 'スライディングシート',
+      12: 'スライディングボード',
+      13: 'アームサポート',
+      14: '回転盤（かいてんばん）',
+      15: '介護用リフト（かいごようリフト）',
+      16: '20〜30度（ど）',
+      17: 'ブレーキ',
+      18: 'フットサポート',
+      19: '仙骨座り（せんこつずわり）',
+      20: '褥瘡（じょくそう）',
+      21: '背抜き（せぬき）',
+      22: 'ティッピングレバー',
+      23: 'ポジショニング',
+      24: '体内時計（たいないどけい）',
+      25: '離床（りしょう）',
+      26: '覚醒（かくせい）',
+      27: '顎（あご）',
+      28: '誤嚥（ごえん）',
+      29: '足底接地（そくていせっち）',
+      30: '自助具（じじょぐ）',
+      31: '自律（じりつ）',
+      32: '目線（めせん）',
+      33: '右側（みぎがわ）',
+      34: 'L字バー（介助バー）',
+      35: '左手・左足（ひだりて・ひだりあし）',
+      36: '後ろ向き（うしろむき）',
+      37: 'テーブル',
+      38: '滑り止めマット（すべりどめマット）',
+      39: '安心（あんしん）',
+      40: '食堂（しょくどう）'
+    };
+
+    // ユーザーの選択状態を保持 { 1: '支持基底面（しじきていめん）', ... }
+    let userAnswers = {};
+    let activeSlotNumber = null;
+    let activeBankIndex = null;
+
+    function findWordObj(key) {
+      for (const bank of WORD_BANKS) {
+        const found = bank.find(item => item.key === key);
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function renderAllSlots() {
+      for (let i = 1; i <= 40; i++) {
+        const el = document.getElementById(`slot-${i}`);
+        if (!el) continue;
+        const selectedKey = userAnswers[i];
+        el.classList.remove('correct', 'incorrect');
+        if (selectedKey) {
+          const wordObj = findWordObj(selectedKey);
+          el.innerHTML = `<span class="text-[11px] bg-teal-700 text-white rounded px-1 mr-1">${i}</span>${wordObj ? wordObj.html : selectedKey}`;
+          el.classList.add('filled');
+        } else {
+          el.innerHTML = `<span class="text-xs">【 ${i} 】タップ</span>`;
+          el.classList.remove('filled');
+        }
+      }
+      renderBankPreviews();
+      updateProgress();
+    }
+
+    function renderBankPreviews() {
+      WORD_BANKS.forEach((bank, bankIdx) => {
+        const container = document.getElementById(`bank-preview-${bankIdx}`);
+        if (!container) return;
+        const usedKeys = Object.values(userAnswers);
+        container.innerHTML = bank.map(item => {
+          const isUsed = usedKeys.includes(item.key);
+          return `<span class="px-2.5 py-1 rounded-lg border text-xs transition ${
+            isUsed
+              ? 'bg-slate-200 border-slate-300 text-slate-400 line-through'
+              : 'bg-white border-teal-300 text-teal-900 font-medium shadow-2xs'
+          }">${item.html}</span>`;
+        }).join('');
+      });
+    }
+
+    function openWordPicker(slotNum, bankIdx) {
+      activeSlotNumber = slotNum;
+      activeBankIndex = bankIdx;
+
+      document.querySelectorAll('.blank-slot').forEach(el => el.classList.remove('active-focus'));
+      const currentSlot = document.getElementById(`slot-${slotNum}`);
+      if (currentSlot) currentSlot.classList.add('active-focus');
+
+      document.getElementById('picker-title-badge').textContent = `【 ${slotNum} 】`;
+      const optionsContainer = document.getElementById('picker-options');
+      const bank = WORD_BANKS[bankIdx];
+      const currentVal = userAnswers[slotNum];
+
+      optionsContainer.innerHTML = bank.map(item => {
+        const isSelectedHere = currentVal === item.key;
+        const isUsedElsewhere = !isSelectedHere && Object.values(userAnswers).includes(item.key);
+        return `
+          <button type="button" onclick="selectWordForSlot('${item.key}')"
+            class="p-3 rounded-xl border text-center transition flex items-center justify-between ${
+              isSelectedHere
+                ? 'bg-teal-700 text-white border-teal-800 font-bold dark-bg shadow-sm'
+                : isUsedElsewhere
+                ? 'bg-slate-100 text-slate-500 border-slate-200'
+                : 'bg-teal-50/70 hover:bg-teal-100 text-slate-800 border-teal-300 font-bold shadow-2xs'
+            }">
+            <span class="mx-auto">${item.html}</span>
+            ${isUsedElsewhere ? '<span class="text-[10px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded ml-1 shrink-0"><ruby>使用中<rt>しようちゅう</rt></ruby></span>' : ''}
+          </button>
+        `;
+      }).join('');
+
+      document.getElementById('picker-backdrop').classList.remove('hidden');
+      document.getElementById('picker-sheet').classList.remove('translate-y-full');
+    }
+
+    function selectWordForSlot(key) {
+      if (!activeSlotNumber) return;
+      userAnswers[activeSlotNumber] = key;
+      saveData();
+      renderAllSlots();
+      closeWordPicker();
+    }
+
+    function clearCurrentSlot() {
+      if (!activeSlotNumber) return;
+      delete userAnswers[activeSlotNumber];
+      saveData();
+      renderAllSlots();
+      closeWordPicker();
+    }
+
+    function closeWordPicker() {
+      document.querySelectorAll('.blank-slot').forEach(el => el.classList.remove('active-focus'));
+      document.getElementById('picker-backdrop').classList.add('hidden');
+      document.getElementById('picker-sheet').classList.add('translate-y-full');
+      activeSlotNumber = null;
+      activeBankIndex = null;
+    }
+
+    function checkSectionAnswers(sectionIdx) {
+      const ranges = [
+        [1, 10],
+        [11, 22],
+        [23, 32],
+        [33, 40]
+      ];
+      const [start, end] = ranges[sectionIdx];
+      let correctCount = 0;
+      const total = end - start + 1;
+
+      for (let i = start; i <= end; i++) {
+        const el = document.getElementById(`slot-${i}`);
+        if (!el) continue;
+        el.classList.remove('correct', 'incorrect');
+        if (userAnswers[i] === CORRECT_ANSWERS[i]) {
+          el.classList.add('correct');
+          correctCount++;
+        } else {
+          el.classList.add('incorrect');
+        }
+      }
+      showToast(`パート${sectionIdx + 1}：${total}<ruby>問中<rt>もんちゅう</rt></ruby> ${correctCount}<ruby>問<rt>もん</rt></ruby> <ruby>正解<rt>せいかい</rt></ruby>！（<ruby>緑<rt>みどり</rt></ruby>＝○、<ruby>赤<rt>あか</rt></ruby>＝×）`);
+    }
+
+    function checkAllAnswers() {
+      let score = 0;
+      for (let i = 1; i <= 40; i++) {
+        const el = document.getElementById(`slot-${i}`);
+        if (el) el.classList.remove('correct', 'incorrect');
+        if (userAnswers[i] === CORRECT_ANSWERS[i]) {
+          score++;
+          if (el) el.classList.add('correct');
+        } else if (el) {
+          el.classList.add('incorrect');
+        }
+      }
+      document.getElementById('summary-score').textContent = score;
+      showToast(`40<ruby>問中<rt>もんちゅう</rt></ruby> ${score}<ruby>問<rt>もん</rt></ruby> <ruby>正解<rt>せいかい</rt></ruby>しました！`);
+      return score;
+    }
+
+    function switchTab(index) {
+      for (let i = 0; i < 6; i++) {
+        document.getElementById(`section-${i}`).classList.add('hidden');
+        document.getElementById(`tab-${i}`).classList.remove('active');
+      }
+      document.getElementById(`section-${index}`).classList.remove('hidden');
+      document.getElementById(`tab-${index}`).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateProgress();
+    }
+
+    function toggleHint(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    function insertTemplate(fieldId, text) {
+      const el = document.getElementById(fieldId);
+      if (!el) return;
+      el.value = el.value.trim() ? el.value.trim() + '\n' + text : text;
+      saveData();
+    }
+
+    function getRadioValue(name) {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      return checked ? checked.value : '';
+    }
+
+    function setRadioValue(name, val) {
+      if (!val) return;
+      const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
+      if (el) el.checked = true;
+    }
+
+    function updateProgress() {
+      const filledCount = Object.keys(userAnswers).filter(k => userAnswers[k]).length;
+      document.getElementById('progress-count').textContent = filledCount;
+      const summaryFilled = document.getElementById('summary-filled');
+      if (summaryFilled) summaryFilled.textContent = filledCount;
+      const pct = Math.max(4, Math.round((filledCount / 40) * 100));
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+    }
+
+    function saveData() {
+      const payload = {
+        studentId: document.getElementById('studentId').value,
+        studentName: document.getElementById('studentName').value,
+        groupId: getRadioValue('groupId'),
+        summary_note: document.getElementById('summary_note').value,
+        userAnswers: userAnswers
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      const statusEl = document.getElementById('save-status');
+      statusEl.innerHTML = '<i class="fa-solid fa-check text-emerald-300"></i> <span><ruby>保存<rt>ほぞん</rt></ruby>OK</span>';
+      updateProgress();
+    }
+
+    function loadData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          const data = JSON.parse(raw);
+          if (data.studentId) document.getElementById('studentId').value = data.studentId;
+          if (data.studentName) document.getElementById('studentName').value = data.studentName;
+          if (data.summary_note) document.getElementById('summary_note').value = data.summary_note;
+          setRadioValue('groupId', data.groupId);
+          if (data.userAnswers && typeof data.userAnswers === 'object') {
+            userAnswers = data.userAnswers;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      renderAllSlots();
+    }
+
+    function buildReportString() {
+      const studentId = document.getElementById('studentId').value || '未入力';
+      const studentName = document.getElementById('studentName').value || '未入力';
+      const groupId = getRadioValue('groupId') || '未選択';
+      const summaryNote = document.getElementById('summary_note').value || '（未入力）';
+      const now = new Date().toLocaleString('ja-JP');
+
+      let score = 0;
+      const answerLines = [];
+      for (let i = 1; i <= 40; i++) {
+        const ans = userAnswers[i] || '（未回答）';
+        const isCorrect = ans === CORRECT_ANSWERS[i];
+        if (isCorrect) score++;
+        const mark = isCorrect ? '○' : '×';
+        answerLines.push(`【${String(i).padStart(2, '0')}】 ${mark} ${ans}`);
+      }
+
+      return `=========================================
+【生活支援技術 180分 穴埋めワーク（全40問）提出シート】
+提出日時: ${now}
+学籍番号: ${studentId}
+名　　前: ${studentName}
+グループ: ${groupId}
+得　　点: ${score} / 40点
+=========================================
+
+■ 1限目①：ボディメカニクスと移乗の基本（【01】〜【10】）
+${answerLines.slice(0, 10).join('\n')}
+
+■ 1限目②：福祉用具と車いすの知識（【11】〜【22】）
+${answerLines.slice(10, 22).join('\n')}
+
+■ 2限目①：睡眠・移乗・食事のつながり（【23】〜【32】）
+${answerLines.slice(22, 32).join('\n')}
+
+■ 2限目②：佐藤さんの事例と声かけ（【33】〜【40】）
+${answerLines.slice(32, 40).join('\n')}
+
+■ 180分のまとめ（車いすへ移乗して食事をする大切さ）
+${summaryNote}
+=========================================`;
+    }
+
+    function generateReport() {
+      checkAllAnswers();
+      const reportText = buildReportString();
+      const previewBox = document.getElementById('report-preview-box');
+      const outputArea = document.getElementById('report-output');
+      outputArea.value = reportText;
+      previewBox.classList.remove('hidden');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(reportText).then(() => {
+          showToast('<ruby>提出<rt>ていしゅつ</rt></ruby>テキストをコピーしました！');
+        }).catch(() => {
+          outputArea.select();
+          document.execCommand('copy');
+          showToast('<ruby>提出<rt>ていしゅつ</rt></ruby>テキストをコピーしました！');
+        });
+      } else {
+        outputArea.select();
+        document.execCommand('copy');
+        showToast('<ruby>提出<rt>ていしゅつ</rt></ruby>テキストをコピーしました！');
+      }
+    }
+
+    function downloadTextFile() {
+      const studentId = (document.getElementById('studentId').value || 'student').replace(/[^a-zA-Z0-9_-]/g, '');
+      const text = buildReportString();
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `穴埋めワーク40問_${studentId}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function showToast(htmlMsg) {
+      const toast = document.getElementById('toast');
+      const msgEl = document.getElementById('toast-msg');
+      if (htmlMsg) msgEl.innerHTML = htmlMsg;
+      toast.classList.remove('opacity-0');
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 3200);
+    }
+
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>
